@@ -1,2 +1,6 @@
-state
 password
+login
+createdb
+createrole
+superuser
+inherit
