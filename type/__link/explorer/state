@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # 2012-2014 Steven Armstrong (steven-cdist at armstrong.cc)
 # 2022 Dennis Camera (cdist at dtnr.ch)
@@ -19,9 +19,9 @@
 # along with cdist. If not, see <http://www.gnu.org/licenses/>.
 #
 
-destination="/$__object_id"
-type="$(cat "$__object/parameter/type")"
-source="$(cat "$__object/parameter/source")"
+destination="/${__object_id:?}"
+type=$(cat "${__object:?}/parameter/type")
+source=$(cat "${__object:?}/parameter/source")
 
 _readlink() {
 	if command -v readlink >/dev/null 2>&1
@@ -42,11 +42,9 @@ _readlink() {
 	fi
 }
 
-destination_dir="${destination%/*}"
-
-case "$type" in
+case ${type}
+in
    symbolic)
-      cd "$destination_dir" || exit 1
       if [ -h "$destination" ]; then
          source_is=$(_readlink "${destination}")
          # ignore trailing slashes for comparison
@@ -60,8 +58,8 @@ case "$type" in
       fi
    ;;
    hard)
-      cd "$destination_dir" || exit 1
-      # check source relative to destination_dir
+      cd "${destination%/*}" || exit 1
+      # check source relative to destination dir
       if [ ! -e "$source" ]; then
          echo sourcemissing
          exit 0
