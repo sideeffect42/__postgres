@@ -23,12 +23,6 @@ destination="/$__object_id"
 type="$(cat "$__object/parameter/type")"
 source="$(cat "$__object/parameter/source")"
 
-# no destination? -> state is absent
-if [ ! -e "$destination" ]; then
-   echo absent
-   exit 0
-fi
-
 _readlink() {
 	if command -v readlink >/dev/null 2>&1
 	then
